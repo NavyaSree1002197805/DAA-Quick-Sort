@@ -73,7 +73,7 @@ def find_median_of_three(array, start, end):
 def quicksort_m3(arr, start, end):
     start_time = time.time()  # Start the timer
     if start < end:
-        pi = median_of_three(arr, start, end)
+        pi = find_median_of_three(arr, start, end)
         pivot_index = partition_m3(arr, start, end, pi)
         quicksort_m3(arr, start, pivot_index - 1)
         quicksort_m3(arr, pivot_index + 1, end)
@@ -93,11 +93,11 @@ def execution_time_plot():
         unsorted_arr = arr.copy()
 
         # Measure execution time for each sorting algorithm
-        sorted_arrayay, quick_time = quick_sort(arr.copy(), 0, size - 1)
+        sorted_array, quick_time = quick_sort(arr.copy(), 0, size - 1)
         print("Quick Sort:")
         print("Size:",size)
         print("Execution Time:", quick_time)
-        sorted_arrayay, quicksort_m3_time = quicksort_m3(arr.copy(), 0, size - 1)
+        sorted_array, quicksort_m3_time = quicksort_m3(arr.copy(), 0, size - 1)
         print("Quicksort (with median-of-three pi selection):")
         print("Size:",size)
         print("Execution Time:", quicksort_m3_times)
