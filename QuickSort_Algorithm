@@ -1,0 +1,120 @@
+# Importing the libraries
+import random
+import time
+import matplotlib.pyplot as plt
+
+# Function to generate a random array of size n
+def generate_random_array(n):
+    arr = [random.randint(0, 10000) for _ in range(n)]
+    return arr
+
+# Partition function for Quick Sort
+def partition(array, start, end):
+    pi = array[start]
+    left = start + 1
+    right = end
+    done = False
+
+    while not done:
+        while left <= right and array[left] <= pi:
+            left += 1
+        while array[right] >= pi and right >= left:
+            right -= 1
+        if right < left:
+            done = True
+        else:
+            array[left], array[right] = array[right], array[left]
+
+    array[start], array[right] = array[right], array[start]
+
+    return right
+
+# Quick Sort algorithm implementation
+def quick_sort(array, start, end):
+    start_time = time.time()
+    if start < end:
+        pivot_index = partition(array, start, end)
+        quick_sort(array, start, pivot_index - 1)
+        quick_sort(array, pivot_index + 1, end)
+    Execution_time_of_algorithm = time.time() - start_time
+    return array, Execution_time_of_algorithm
+
+# Partition function for Quick Sort with median of three
+def partition_m3(array, start, end, pi):
+    i = start - 1
+    for j in range(start, end):
+        if array[j] < pi:
+            i += 1
+            array[i], array[j] = array[j], array[i]
+    return i + 1
+
+# Function to find the median of three values
+def find_median_of_three(array, start, end):
+    mid = (start + end) // 2
+    a = array[start]
+    b = array[mid]
+    c = array[end]
+    if a < b:
+        if b < c:
+            return b
+        elif a < c:
+            return c
+        else:
+            return a
+    else:
+        if a < c:
+            return a
+        elif b < c:
+            return c
+        else:
+            return b
+
+# Quick Sort algorithm implementation with median of three
+def quicksort_m3(arr, start, end):
+    start_time = time.time()  # Start the timer
+    if start < end:
+        pi = median_of_three(arr, start, end)
+        pivot_index = partition_m3(arr, start, end, pi)
+        quicksort_m3(arr, start, pivot_index - 1)
+        quicksort_m3(arr, pivot_index + 1, end)
+    execution_time = time.time() - start_time
+    return arr, execution_time
+
+# Function to plot the execution time for quick sort algorithm
+def execution_time_plot():
+
+    input_size = [2000, 4000, 5000, 6000, 8000]
+    quick_times = []
+    quicksort_m3_times = []
+
+    # Iterate over different input sizes
+    for size in input_size:
+        arr = generate_random_array(size)
+        unsorted_arr = arr.copy()
+
+        # Measure execution time for each sorting algorithm
+        sorted_arrayay, quick_time = quick_sort(arr.copy(), 0, size - 1)
+        print("Quick Sort:")
+        print("Size:",size)
+        print("Execution Time:", quick_time)
+        sorted_arrayay, quicksort_m3_time = quicksort_m3(arr.copy(), 0, size - 1)
+        print("Quicksort (with median-of-three pi selection):")
+        print("Size:",size)
+        print("Execution Time:", quicksort_m3_times)
+
+        # Append the execution times to the corresponding lists
+        quick_times.append(quick_time)
+        quicksort_m3_times.append(quicksort_m3_time)
+
+    # Plotting the execution time for quick sort algorithm
+    plt.plot(input_size, quick_times, label='Quick Sort')
+    plt.plot(input_size, quicksort_m3_times, label='Quicksort (with median-of-three pi selection)')
+    plt.xlabel('Input Size')
+    plt.ylabel('Execution Time (seconds)')
+    plt.title('Quick Sort Algorithm Execution Time')
+    plt.legend()
+    plt.show()
+
+# Main program
+if __name__ == "__main__":
+    execution_time_plot()
